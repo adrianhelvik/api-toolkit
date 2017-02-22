@@ -244,7 +244,9 @@ class Model {
     const query = dbQuery.text
     const values = dbQuery.values
 
-    return this.db.query({ query, values })
+    const dbResponse = await this.db.query({ query, values })
+
+    return new this(dbResponse[0])
   }
 
   static async one(id) {
