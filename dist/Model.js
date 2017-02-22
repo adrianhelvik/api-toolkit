@@ -170,7 +170,7 @@ var Model = (_temp = _class = function () {
 
                 relation = _step.value;
                 _context2.next = 11;
-                return this.loadHasOneRelation(relation);
+                return this.loadHasOneRelation(relation, hasOne[relation]);
 
               case 11:
                 _iteratorNormalCompletion = true;
@@ -228,17 +228,24 @@ var Model = (_temp = _class = function () {
   }, {
     key: 'loadHasOneRelation',
     value: function () {
-      var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(relation) {
-        var foreignKey, model;
+      var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(relation, _ref4) {
+        var foreignKey = _ref4.foreignKey,
+            model = _ref4.model;
+        var related;
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                foreignKey = relation.foreignKey, model = relation.model;
-                _context3.next = 3;
+                _context3.next = 2;
                 return model.oneWhere(_defineProperty({}, foreignKey, this.id));
 
-              case 3:
+              case 2:
+                related = _context3.sent;
+
+
+                this[relation] = related;
+
+              case 4:
               case 'end':
                 return _context3.stop();
             }
@@ -246,7 +253,7 @@ var Model = (_temp = _class = function () {
         }, _callee3, this);
       }));
 
-      function loadHasOneRelation(_x) {
+      function loadHasOneRelation(_x, _x2) {
         return _ref3.apply(this, arguments);
       }
 
@@ -255,7 +262,7 @@ var Model = (_temp = _class = function () {
   }, {
     key: 'loadHasManyRelations',
     value: function () {
-      var _ref4 = _asyncToGenerator(regeneratorRuntime.mark(function _callee4() {
+      var _ref5 = _asyncToGenerator(regeneratorRuntime.mark(function _callee4() {
         var _constructor, hasMany, table, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, relation;
 
         return regeneratorRuntime.wrap(function _callee4$(_context4) {
@@ -352,7 +359,7 @@ var Model = (_temp = _class = function () {
       }));
 
       function loadHasManyRelations() {
-        return _ref4.apply(this, arguments);
+        return _ref5.apply(this, arguments);
       }
 
       return loadHasManyRelations;
@@ -360,7 +367,7 @@ var Model = (_temp = _class = function () {
   }, {
     key: 'loadHasManyRelation',
     value: function () {
-      var _ref5 = _asyncToGenerator(regeneratorRuntime.mark(function _callee5(name, options) {
+      var _ref6 = _asyncToGenerator(regeneratorRuntime.mark(function _callee5(name, options) {
         var _constructor$parseHas, foreignKey, relatedModel, related;
 
         return regeneratorRuntime.wrap(function _callee5$(_context5) {
@@ -393,8 +400,8 @@ var Model = (_temp = _class = function () {
         }, _callee5, this);
       }));
 
-      function loadHasManyRelation(_x2, _x3) {
-        return _ref5.apply(this, arguments);
+      function loadHasManyRelation(_x3, _x4) {
+        return _ref6.apply(this, arguments);
       }
 
       return loadHasManyRelation;
@@ -402,7 +409,7 @@ var Model = (_temp = _class = function () {
   }, {
     key: 'loadManyToManyRelations',
     value: function () {
-      var _ref6 = _asyncToGenerator(regeneratorRuntime.mark(function _callee6() {
+      var _ref7 = _asyncToGenerator(regeneratorRuntime.mark(function _callee6() {
         var _this = this;
 
         var _constructor2, manyToMany, table, id, _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _loop, _iterator3, _step3;
@@ -521,7 +528,7 @@ var Model = (_temp = _class = function () {
       }));
 
       function loadManyToManyRelations() {
-        return _ref6.apply(this, arguments);
+        return _ref7.apply(this, arguments);
       }
 
       return loadManyToManyRelations;
@@ -561,7 +568,7 @@ var Model = (_temp = _class = function () {
   }, {
     key: 'save',
     value: function () {
-      var _ref7 = _asyncToGenerator(regeneratorRuntime.mark(function _callee7() {
+      var _ref8 = _asyncToGenerator(regeneratorRuntime.mark(function _callee7() {
         var table, values, query, dbResponse, newColumns;
         return regeneratorRuntime.wrap(function _callee7$(_context8) {
           while (1) {
@@ -592,7 +599,7 @@ var Model = (_temp = _class = function () {
       }));
 
       function save() {
-        return _ref7.apply(this, arguments);
+        return _ref8.apply(this, arguments);
       }
 
       return save;
@@ -600,7 +607,7 @@ var Model = (_temp = _class = function () {
   }, {
     key: 'destroy',
     value: function () {
-      var _ref8 = _asyncToGenerator(regeneratorRuntime.mark(function _callee8() {
+      var _ref9 = _asyncToGenerator(regeneratorRuntime.mark(function _callee8() {
         return regeneratorRuntime.wrap(function _callee8$(_context9) {
           while (1) {
             switch (_context9.prev = _context9.next) {
@@ -617,7 +624,7 @@ var Model = (_temp = _class = function () {
       }));
 
       function destroy() {
-        return _ref8.apply(this, arguments);
+        return _ref9.apply(this, arguments);
       }
 
       return destroy;
@@ -644,7 +651,7 @@ var Model = (_temp = _class = function () {
   }, {
     key: 'all',
     value: function () {
-      var _ref9 = _asyncToGenerator(regeneratorRuntime.mark(function _callee9() {
+      var _ref10 = _asyncToGenerator(regeneratorRuntime.mark(function _callee9() {
         var whereClauses = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
         var query, instances;
         return regeneratorRuntime.wrap(function _callee9$(_context10) {
@@ -664,7 +671,7 @@ var Model = (_temp = _class = function () {
       }));
 
       function all() {
-        return _ref9.apply(this, arguments);
+        return _ref10.apply(this, arguments);
       }
 
       return all;
@@ -672,7 +679,7 @@ var Model = (_temp = _class = function () {
   }, {
     key: 'executeQueryAndCreateInstances',
     value: function () {
-      var _ref10 = _asyncToGenerator(regeneratorRuntime.mark(function _callee10(query) {
+      var _ref11 = _asyncToGenerator(regeneratorRuntime.mark(function _callee10(query) {
         var _this2 = this;
 
         var dbResponse, instances, _iteratorNormalCompletion5, _didIteratorError5, _iteratorError5, _iterator5, _step5, instance;
@@ -785,8 +792,8 @@ var Model = (_temp = _class = function () {
         }, _callee10, this, [[14, 25, 29, 37], [30,, 32, 36]]);
       }));
 
-      function executeQueryAndCreateInstances(_x5) {
-        return _ref10.apply(this, arguments);
+      function executeQueryAndCreateInstances(_x6) {
+        return _ref11.apply(this, arguments);
       }
 
       return executeQueryAndCreateInstances;
@@ -799,7 +806,7 @@ var Model = (_temp = _class = function () {
   }, {
     key: 'query',
     value: function () {
-      var _ref11 = _asyncToGenerator(regeneratorRuntime.mark(function _callee11(closure) {
+      var _ref12 = _asyncToGenerator(regeneratorRuntime.mark(function _callee11(closure) {
         var table, query;
         return regeneratorRuntime.wrap(function _callee11$(_context12) {
           while (1) {
@@ -821,8 +828,8 @@ var Model = (_temp = _class = function () {
         }, _callee11, this);
       }));
 
-      function query(_x6) {
-        return _ref11.apply(this, arguments);
+      function query(_x7) {
+        return _ref12.apply(this, arguments);
       }
 
       return query;
@@ -830,7 +837,7 @@ var Model = (_temp = _class = function () {
   }, {
     key: 'filterOnKey',
     value: function () {
-      var _ref12 = _asyncToGenerator(regeneratorRuntime.mark(function _callee12(key, val) {
+      var _ref13 = _asyncToGenerator(regeneratorRuntime.mark(function _callee12(key, val) {
         var query, matches;
         return regeneratorRuntime.wrap(function _callee12$(_context13) {
           while (1) {
@@ -863,8 +870,8 @@ var Model = (_temp = _class = function () {
         }, _callee12, this);
       }));
 
-      function filterOnKey(_x7, _x8) {
-        return _ref12.apply(this, arguments);
+      function filterOnKey(_x8, _x9) {
+        return _ref13.apply(this, arguments);
       }
 
       return filterOnKey;
@@ -914,7 +921,7 @@ var Model = (_temp = _class = function () {
   }, {
     key: 'oneWhere',
     value: function () {
-      var _ref13 = _asyncToGenerator(regeneratorRuntime.mark(function _callee13() {
+      var _ref14 = _asyncToGenerator(regeneratorRuntime.mark(function _callee13() {
         var whereClauses = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         var dbQuery, query, values, dbResponse;
         return regeneratorRuntime.wrap(function _callee13$(_context14) {
@@ -940,7 +947,7 @@ var Model = (_temp = _class = function () {
       }));
 
       function oneWhere() {
-        return _ref13.apply(this, arguments);
+        return _ref14.apply(this, arguments);
       }
 
       return oneWhere;
@@ -948,7 +955,7 @@ var Model = (_temp = _class = function () {
   }, {
     key: 'one',
     value: function () {
-      var _ref14 = _asyncToGenerator(regeneratorRuntime.mark(function _callee14(id) {
+      var _ref15 = _asyncToGenerator(regeneratorRuntime.mark(function _callee14(id) {
         var query, dbResponse, modelData, instance;
         return regeneratorRuntime.wrap(function _callee14$(_context15) {
           while (1) {
@@ -989,8 +996,8 @@ var Model = (_temp = _class = function () {
         }, _callee14, this);
       }));
 
-      function one(_x10) {
-        return _ref14.apply(this, arguments);
+      function one(_x11) {
+        return _ref15.apply(this, arguments);
       }
 
       return one;
@@ -998,7 +1005,7 @@ var Model = (_temp = _class = function () {
   }, {
     key: 'create',
     value: function () {
-      var _ref15 = _asyncToGenerator(regeneratorRuntime.mark(function _callee15(fields) {
+      var _ref16 = _asyncToGenerator(regeneratorRuntime.mark(function _callee15(fields) {
         var instance;
         return regeneratorRuntime.wrap(function _callee15$(_context16) {
           while (1) {
@@ -1022,8 +1029,8 @@ var Model = (_temp = _class = function () {
         }, _callee15, this);
       }));
 
-      function create(_x11) {
-        return _ref15.apply(this, arguments);
+      function create(_x12) {
+        return _ref16.apply(this, arguments);
       }
 
       return create;
@@ -1044,7 +1051,7 @@ var Model = (_temp = _class = function () {
   }, {
     key: 'destroy',
     value: function () {
-      var _ref16 = _asyncToGenerator(regeneratorRuntime.mark(function _callee16(id) {
+      var _ref17 = _asyncToGenerator(regeneratorRuntime.mark(function _callee16(id) {
         var removedData, query;
         return regeneratorRuntime.wrap(function _callee16$(_context17) {
           while (1) {
@@ -1071,8 +1078,8 @@ var Model = (_temp = _class = function () {
         }, _callee16, this);
       }));
 
-      function destroy(_x12) {
-        return _ref16.apply(this, arguments);
+      function destroy(_x13) {
+        return _ref17.apply(this, arguments);
       }
 
       return destroy;
@@ -1093,7 +1100,7 @@ var Model = (_temp = _class = function () {
   }, {
     key: 'update',
     value: function () {
-      var _ref17 = _asyncToGenerator(regeneratorRuntime.mark(function _callee17(id) {
+      var _ref18 = _asyncToGenerator(regeneratorRuntime.mark(function _callee17(id) {
         var updates = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
         var error, query, newValue;
         return regeneratorRuntime.wrap(function _callee17$(_context18) {
@@ -1133,8 +1140,8 @@ var Model = (_temp = _class = function () {
         }, _callee17, this);
       }));
 
-      function update(_x13) {
-        return _ref17.apply(this, arguments);
+      function update(_x14) {
+        return _ref18.apply(this, arguments);
       }
 
       return update;
