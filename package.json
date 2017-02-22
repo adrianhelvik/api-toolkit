@@ -2,7 +2,7 @@
   "name": "@adrianhelvik/api-toolkit",
   "version": "0.1.0",
   "description": "",
-  "main": "build/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "jest",
     "test:watch": "npm run test -- --watch",
