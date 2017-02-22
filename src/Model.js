@@ -168,6 +168,9 @@ class Model {
     const { foreignKey, relatedModel } = this.constructor.parseHasManyOptions(options)
 
     if (! relatedModel) {
+      if (options.model && options.foreignKey) {
+        throw Error('[loadHasManyRelation]: You forget to create a mapping from a key to { model, options }')
+      }
       throw Error('Cannot load hasMany relations for non-model!')
     }
 
@@ -176,7 +179,7 @@ class Model {
     this[name] = related
   }
 
-  static parseHasManyOptions(options) {
+  static asManyOptions(options) {
     const { table } = this
 
     // TODO: Find better test
@@ -389,4 +392,3 @@ class Model {
 }
 
 export default Model
-
