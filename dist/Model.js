@@ -735,6 +735,9 @@ var Model = (_temp = _class = function () {
   }, {
     key: 'parseHasManyOptions',
     value: function parseHasManyOptions(options) {
+      var table = this.table;
+
+
       if (options.prototype instanceof Model) {
         return {
           foreignKey: table._name + '_id',
