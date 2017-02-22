@@ -237,18 +237,27 @@ var Model = (_temp = _class = function () {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _context3.next = 2;
+                if (!this[Symbol.for(relation)]) {
+                  _context3.next = 2;
+                  break;
+                }
+
+                return _context3.abrupt('return');
+
+              case 2:
+                _context3.next = 4;
                 return model.oneWhere({
                   id: this[ownKey]
                 });
 
-              case 2:
+              case 4:
                 related = _context3.sent;
 
 
                 this[relation] = related;
+                this[Symbol.for(relation)] = true;
 
-              case 4:
+              case 7:
               case 'end':
                 return _context3.stop();
             }
