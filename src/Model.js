@@ -179,7 +179,7 @@ class Model {
     this[name] = related
   }
 
-  static asManyOptions(options) {
+  static parseHasManyOptions(options) {
     const { table } = this
 
     // TODO: Find better test
