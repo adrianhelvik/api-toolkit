@@ -1,0 +1,32 @@
+{
+  "name": "@adrianhelvik/api-toolkit",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "npm run test -- --watch",
+    "test:coverage": "npm run test -- --coverage"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "sql": "^0.74.0",
+    "type-of": "^2.0.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.23.0",
+    "babel-jest": "^19.0.0",
+    "babel-plugin-transform-class-properties": "^6.23.0",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-es2016": "^6.22.0",
+    "babel-preset-es2017": "^6.22.0",
+    "body-parser": "^1.16.1",
+    "express": "^4.14.1",
+    "jest": "^19.0.0",
+    "supertest": "^3.0.0"
+  },
+  "peerDependencies": {
+    "express": "^4.14.1"
+  }
+}
