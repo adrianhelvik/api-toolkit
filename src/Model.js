@@ -235,7 +235,7 @@ class Model {
 
   static async oneWhere(whereClauses = {}) {
     const dbQuery = table
-      .select(table.star())
+      .select(this.table.star())
       .from(this.table)
       .where(whereClauses)
       .limit(1)
