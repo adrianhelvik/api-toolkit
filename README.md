@@ -39,7 +39,7 @@ class ArticleCtrl extends Controller {
 
 ```typescript
 interface DatabaseInterface {
-  query({text: string, values: array<Any> }): { rows: Array<object> }
+  query({ text: string, values: array<Any> }): Array<object>
 }
 ```
 

@@ -1,12 +1,17 @@
 import sql from 'sql'
 import EventEmitter from 'events'
 
-sql.setDialect('postgres')
-
 // TODO: Refactor
 class Model {
   static _table = null
   static db = null
+
+  /**
+   * Set the type of database that is used.
+   */
+  static setDialect(dialect) {
+    sql.setDialect(dialect)
+  }
 
   /**
    * Create an event emitter on demand to isolate it to each subclass
@@ -102,7 +107,6 @@ class Model {
     const dbResponse = await this.db.query(query)
 
     const instances = dbResponse
-      .rows
       .map(data => new this(data))
 
     if (this.eagerLoadRelations) {
@@ -189,7 +193,6 @@ class Model {
         const dbResponse = await this.constructor.db.query(query)
 
         this[relation] = dbResponse
-          .rows
           .map(data => new relatedModel(data))
       }
     }
@@ -211,7 +214,7 @@ class Model {
   static async one(id) {
     const query = this.createQueryForOne(id)
     const dbResponse = await this.db.query(query)
-    const modelData = dbResponse.rows[0]
+    const modelData = dbResponse[0]
 
     if (! modelData) {
       return null
@@ -243,7 +246,7 @@ class Model {
       .toQuery()
 
     const dbResponse = await this.constructor.db.query(query)
-    const newColumns = dbResponse.rows[0]
+    const newColumns = dbResponse[0]
 
     Object.assign(this, newColumns)
   }

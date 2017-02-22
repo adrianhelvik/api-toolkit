@@ -3,6 +3,8 @@ import Model from '../src/Model'
 describe('Model', () => {
   let ConcreteModel
   beforeEach(() => {
+    Model.setDialect('postgres')
+
     ConcreteModel = class extends Model {
       static table = 'some-table'
       static columns = ['id', 'name', 'role']
@@ -27,10 +29,9 @@ describe('Model', () => {
       })
 
       it('returns an instance of the model class', async () => {
-        ConcreteModel.db.query.mockReturnValueOnce({
-          rows: [{
-          }]
-        })
+        ConcreteModel.db.query.mockReturnValueOnce([
+          { id: 'some-id' }
+        ])
 
         const instance = await ConcreteModel.one('some-id')
 
@@ -52,12 +53,10 @@ describe('Model', () => {
       })
 
       it('returns instances of the model class', async () => {
-        ConcreteModel.db.query.mockReturnValueOnce({
-          rows: [
-            { id: 'some-id' },
-            { id: 'some-other-id' }
-          ]
-        })
+        ConcreteModel.db.query.mockReturnValueOnce([
+          { id: 'some-id' },
+          { id: 'some-other-id' }
+        ])
 
         const instances = await ConcreteModel.all()
 
@@ -77,8 +76,8 @@ describe('Model', () => {
         const newInstance = { id: 'some-new-instance' }
 
         ConcreteModel.db.query
-          .mockReturnValueOnce({ rows: [] }) // for update
-          .mockReturnValueOnce({ rows: [newInstance] }) // for fetching the instance instance
+          .mockReturnValueOnce([]) // for update
+          .mockReturnValueOnce([newInstance]) // for fetching the instance instance
 
         const actualNewInstance = await ConcreteModel.update('my-id', { name: 'A name' })
 
@@ -98,8 +97,6 @@ describe('Model', () => {
           expect(error.message).toBe('[Model]: Updates are required')
         }
       })
-
-      it('returns the updated value')
     })
 
     describe('.destroy()', () => {
@@ -116,7 +113,7 @@ describe('Model', () => {
 
       it('calls the database with the correct sql', async () => {
         ConcreteModel.db.query
-          .mockReturnValueOnce({ rows: [] })
+          .mockReturnValueOnce([])
 
         await ConcreteModel.destroy(id)
 
@@ -132,7 +129,7 @@ describe('Model', () => {
 
       beforeEach(async () => {
         ConcreteModel.db.query
-          .mockReturnValueOnce({ rows: [] })
+          .mockReturnValueOnce([])
 
         instance = await ConcreteModel.create({
           name: 'some-name',
@@ -182,7 +179,7 @@ describe('Model', () => {
         instance.role = 'some-role'
 
         ConcreteModel.db.query
-          .mockReturnValueOnce({ rows: [] })
+          .mockReturnValueOnce([])
 
         await instance.save()
 
@@ -192,9 +189,7 @@ describe('Model', () => {
         })
       })
     })
-    describe('.destroy()', () => {
-    })
-    describe('.loadRelations()', () => {
-    })
+    describe('.destroy()')
+    describe('.loadRelations()')
   })
 })
