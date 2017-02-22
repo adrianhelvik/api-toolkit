@@ -176,6 +176,11 @@ class Model {
     })
 
     this[relation] = related
+
+    if (this.constructor.eagerLoadRelations) {
+      related.loadRelations()
+    }
+
     this[Symbol.for(relation)] = true
   }
 
@@ -205,6 +210,11 @@ class Model {
     }
 
     const related = await relatedModel.filterOnKey(foreignKey, this.id)
+
+    if (this.eagerLoadRelations) {
+      related.loadRelations()
+    }
+
     this[name] = related
   }
 
@@ -270,7 +280,13 @@ class Model {
         const dbResponse = await this.constructor.db.query(query)
 
         this[relation] = dbResponse
-          .map(data => new relatedModel(data))
+          .map(data => {
+            const instance = new relatedModel(data)
+            if (this.eagerLoadRelations) {
+              instance.loadRelations()
+            }
+            return instance
+          })
       }
     }
   }

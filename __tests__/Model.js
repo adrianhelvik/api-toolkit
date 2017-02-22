@@ -343,6 +343,17 @@ describe('Model', () => {
 
         expect(book.bookshelf).toEqual(bookshelf)
       })
+
+      it('is an instance of the model', async () => {
+        let book = new Book({ id: 'book', bookshelf: 'the-bookshelf' })
+        let bookshelf = new Bookshelf({ id: 'the-bookshelf' })
+
+        Bookshelf.db.query.mockReturnValueOnce([bookshelf])
+
+        await book.loadHasOneRelations()
+
+        expect(book.bookshelf instanceof Bookshelf).toBe(true)
+      })
     })
   })
 })
