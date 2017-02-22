@@ -175,7 +175,7 @@ var Model = (_temp = _class = function () {
                 _context2.prev = 14;
                 _context2.t0 = _context2['catch'](9);
 
-                if (!(hasMany[relation].model && hasMany[relation].foreignKey)) {
+                if (!(hasMany.model && hasMany.foreignKey)) {
                   _context2.next = 18;
                   break;
                 }
