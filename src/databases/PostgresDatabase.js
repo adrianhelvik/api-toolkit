@@ -33,7 +33,7 @@ class PostgresDatabase {
 
   async query({ query, values }) {
     const connection = await this.connect()
-    const dbResponse = connection.query(query, values)
+    const dbResponse = await connection.query(query, values)
 
     return dbResponse.rows
   }

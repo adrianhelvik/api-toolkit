@@ -78,7 +78,7 @@ var PostgresDatabase = function () {
       var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(_ref3) {
         var _query = _ref3.query,
             values = _ref3.values;
-        var connection;
+        var connection, dbResponse;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -88,9 +88,10 @@ var PostgresDatabase = function () {
 
               case 2:
                 connection = _context2.sent;
-                return _context2.abrupt('return', connection.query(_query, values));
+                dbResponse = connection.query(_query, values);
+                return _context2.abrupt('return', dbResponse.rows);
 
-              case 4:
+              case 5:
               case 'end':
                 return _context2.stop();
             }
