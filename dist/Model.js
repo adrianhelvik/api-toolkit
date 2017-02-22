@@ -176,10 +176,18 @@ var Model = function () {
                             relatedModel = options.model;
                           }
 
-                          _context2.next = 7;
-                          return relatedModel.filterOnKey(foreignKey, id);
+                          if (relatedModel) {
+                            _context2.next = 7;
+                            break;
+                          }
+
+                          throw Error('Cannot load hasMany relations for non-model!');
 
                         case 7:
+                          _context2.next = 9;
+                          return relatedModel.filterOnKey(foreignKey, id);
+
+                        case 9:
                           related = _context2.sent;
 
 
@@ -187,7 +195,7 @@ var Model = function () {
                             return new relatedModel(relatedData);
                           });
 
-                        case 9:
+                        case 11:
                         case 'end':
                           return _context2.stop();
                       }
