@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _sql = require('sql');
@@ -734,34 +736,21 @@ var Model = function () {
       };
     }
   }, {
-    key: 'one',
+    key: 'oneWhere',
     value: function () {
-      var _ref10 = _asyncToGenerator(regeneratorRuntime.mark(function _callee10(id) {
-        var query, dbResponse, modelData, instance;
+      var _ref10 = _asyncToGenerator(regeneratorRuntime.mark(function _callee10() {
+        var whereClauses = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+        var dbQuery, query, values;
         return regeneratorRuntime.wrap(function _callee10$(_context12) {
           while (1) {
             switch (_context12.prev = _context12.next) {
               case 0:
-                query = this.createQueryForOne(id);
-                _context12.next = 3;
-                return this.db.query(query);
+                dbQuery = table.select(table.star()).from(this.table).where(whereClauses).limit(1);
+                query = dbQuery.text;
+                values = dbQuery.values;
+                return _context12.abrupt('return', this.db.query({ query: query, values: values }));
 
-              case 3:
-                dbResponse = _context12.sent;
-                modelData = dbResponse[0];
-
-                if (modelData) {
-                  _context12.next = 7;
-                  break;
-                }
-
-                return _context12.abrupt('return', null);
-
-              case 7:
-                instance = new this(modelData);
-                return _context12.abrupt('return', instance);
-
-              case 9:
+              case 4:
               case 'end':
                 return _context12.stop();
             }
@@ -769,32 +758,49 @@ var Model = function () {
         }, _callee10, this);
       }));
 
-      function one(_x6) {
+      function oneWhere() {
         return _ref10.apply(this, arguments);
       }
 
-      return one;
+      return oneWhere;
     }()
   }, {
-    key: 'create',
+    key: 'one',
     value: function () {
-      var _ref11 = _asyncToGenerator(regeneratorRuntime.mark(function _callee11(fields) {
-        var instance;
+      var _ref11 = _asyncToGenerator(regeneratorRuntime.mark(function _callee11(id) {
+        var query, dbResponse, modelData, instance;
         return regeneratorRuntime.wrap(function _callee11$(_context13) {
           while (1) {
             switch (_context13.prev = _context13.next) {
               case 0:
-                instance = new this(fields);
-                _context13.next = 3;
-                return instance.save();
+                if (!(id && (typeof id === 'undefined' ? 'undefined' : _typeof(id)) === 'object')) {
+                  _context13.next = 2;
+                  break;
+                }
 
-              case 3:
+                return _context13.abrupt('return', this.oneWhere(id));
 
-                this.emit('create', instance);
-
-                return _context13.abrupt('return', instance);
+              case 2:
+                query = this.createQueryForOne(id);
+                _context13.next = 5;
+                return this.db.query(query);
 
               case 5:
+                dbResponse = _context13.sent;
+                modelData = dbResponse[0];
+
+                if (modelData) {
+                  _context13.next = 9;
+                  break;
+                }
+
+                return _context13.abrupt('return', null);
+
+              case 9:
+                instance = new this(modelData);
+                return _context13.abrupt('return', instance);
+
+              case 11:
               case 'end':
                 return _context13.stop();
             }
@@ -802,8 +808,41 @@ var Model = function () {
         }, _callee11, this);
       }));
 
-      function create(_x7) {
+      function one(_x7) {
         return _ref11.apply(this, arguments);
+      }
+
+      return one;
+    }()
+  }, {
+    key: 'create',
+    value: function () {
+      var _ref12 = _asyncToGenerator(regeneratorRuntime.mark(function _callee12(fields) {
+        var instance;
+        return regeneratorRuntime.wrap(function _callee12$(_context14) {
+          while (1) {
+            switch (_context14.prev = _context14.next) {
+              case 0:
+                instance = new this(fields);
+                _context14.next = 3;
+                return instance.save();
+
+              case 3:
+
+                this.emit('create', instance);
+
+                return _context14.abrupt('return', instance);
+
+              case 5:
+              case 'end':
+                return _context14.stop();
+            }
+          }
+        }, _callee12, this);
+      }));
+
+      function create(_x8) {
+        return _ref12.apply(this, arguments);
       }
 
       return create;
@@ -824,19 +863,19 @@ var Model = function () {
   }, {
     key: 'destroy',
     value: function () {
-      var _ref12 = _asyncToGenerator(regeneratorRuntime.mark(function _callee12(id) {
+      var _ref13 = _asyncToGenerator(regeneratorRuntime.mark(function _callee13(id) {
         var removedData, query;
-        return regeneratorRuntime.wrap(function _callee12$(_context14) {
+        return regeneratorRuntime.wrap(function _callee13$(_context15) {
           while (1) {
-            switch (_context14.prev = _context14.next) {
+            switch (_context15.prev = _context15.next) {
               case 0:
-                _context14.next = 2;
+                _context15.next = 2;
                 return this.one(id);
 
               case 2:
-                removedData = _context14.sent;
+                removedData = _context15.sent;
                 query = this.createQueryForDestroy(id);
-                _context14.next = 6;
+                _context15.next = 6;
                 return this.db.query(query);
 
               case 6:
@@ -845,14 +884,14 @@ var Model = function () {
 
               case 7:
               case 'end':
-                return _context14.stop();
+                return _context15.stop();
             }
           }
-        }, _callee12, this);
+        }, _callee13, this);
       }));
 
-      function destroy(_x8) {
-        return _ref12.apply(this, arguments);
+      function destroy(_x9) {
+        return _ref13.apply(this, arguments);
       }
 
       return destroy;
@@ -873,15 +912,15 @@ var Model = function () {
   }, {
     key: 'update',
     value: function () {
-      var _ref13 = _asyncToGenerator(regeneratorRuntime.mark(function _callee13(id) {
+      var _ref14 = _asyncToGenerator(regeneratorRuntime.mark(function _callee14(id) {
         var updates = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
         var error, query, newValue;
-        return regeneratorRuntime.wrap(function _callee13$(_context15) {
+        return regeneratorRuntime.wrap(function _callee14$(_context16) {
           while (1) {
-            switch (_context15.prev = _context15.next) {
+            switch (_context16.prev = _context16.next) {
               case 0:
                 if (Object.keys(updates).length) {
-                  _context15.next = 4;
+                  _context16.next = 4;
                   break;
                 }
 
@@ -892,29 +931,29 @@ var Model = function () {
 
               case 4:
                 query = this.createQueryForUpdate(id, updates);
-                _context15.next = 7;
+                _context16.next = 7;
                 return this.db.query(query);
 
               case 7:
-                _context15.next = 9;
+                _context16.next = 9;
                 return this.one(id);
 
               case 9:
-                newValue = _context15.sent;
+                newValue = _context16.sent;
 
                 this.emit('update', newValue);
-                return _context15.abrupt('return', newValue);
+                return _context16.abrupt('return', newValue);
 
               case 12:
               case 'end':
-                return _context15.stop();
+                return _context16.stop();
             }
           }
-        }, _callee13, this);
+        }, _callee14, this);
       }));
 
-      function update(_x9) {
-        return _ref13.apply(this, arguments);
+      function update(_x10) {
+        return _ref14.apply(this, arguments);
       }
 
       return update;
