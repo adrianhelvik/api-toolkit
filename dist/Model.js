@@ -701,7 +701,10 @@ var Model = function () {
 
               case 2:
                 query = this.table.select(this.table.star()).from(this.table).where(this.table[key].equals(val)).toQuery();
-                return _context11.abrupt('return', this.executeQueryAndCreateInstances(query));
+                return _context11.abrupt('return', this.executeQueryAndCreateInstances({
+                  query: query.text,
+                  values: query.values
+                }));
 
               case 4:
               case 'end':
