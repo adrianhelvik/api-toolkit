@@ -1,4 +1,5 @@
 import Model from '../src/Model'
+import type from 'type-of'
 
 describe('Model', () => {
   let ConcreteModel
@@ -170,6 +171,55 @@ describe('Model', () => {
         expect(actual).toEqual(expected)
       })
     })
+    describe('.loadHasManyRelations()', () => {
+      class Book extends Model {
+        static table = 'Book'
+        static columns = ['id', 'title', 'bookshelf']
+        static db = {
+          query: jest.fn()
+        }
+      }
+
+      class Bookshelf extends Model {
+        static table = 'Bookshelf'
+        static columns = ['id']
+
+        static hasMany = {
+          books: {
+            model: Book,
+            foreignKey: 'bookshelf'
+          }
+        }
+        static db = {
+          query: jest.fn()
+        }
+      }
+
+      let bookshelf
+      beforeEach(async () => {
+        Bookshelf.db.query
+          .mockReturnValueOnce([{ id: 'bookshelf-id' }])
+
+        bookshelf = await Bookshelf.one('bookshelf-id')
+
+        Book.db.query
+          .mockReturnValueOnce([{
+            id: 'book-id',
+            bookshelf: 'bookshelf-id',
+            title: 'Betty Boop'
+          }])
+
+        await bookshelf.loadHasManyRelations()
+      })
+
+      it('loads an array with the relation', () => {
+        expect(bookshelf.books).toEqual([{
+          id: 'book-id',
+          bookshelf: 'bookshelf-id',
+          title: 'Betty Boop'
+        }])
+      })
+    })
   })
 
   describe('instance methods', () => {
@@ -189,9 +239,8 @@ describe('Model', () => {
         })
       })
     })
+
     describe('.destroy()', () => {
-    })
-    describe('.loadRelations()', () => {
     })
   })
 })

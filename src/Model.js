@@ -1,7 +1,6 @@
 import sql from 'sql'
 import EventEmitter from 'events'
 
-// TODO: Refactor
 class Model {
   static _table = null
   static db = null
@@ -141,10 +140,12 @@ class Model {
       .where(this.table[key].equals(val))
       .toQuery()
 
-    return this.executeQueryAndCreateInstances({
+    const matches = await this.executeQueryAndCreateInstances({
       query: query.text,
       values: query.values
     })
+
+    return matches
   }
 
   async loadRelations() {
@@ -154,32 +155,37 @@ class Model {
 
   async loadHasManyRelations() {
     const { hasMany, table } = this.constructor
-    const { id } = this
 
     if (hasMany) {
       for (const relation of Object.keys(hasMany)) {
-        const options = hasMany[relation]
-
-        let foreignKey
-        let relatedModel
-
-        if (options.prototype instanceof Model) {
-          foreignKey = table._name + '_id'
-          relatedModel = options
-        } else {
-          foreignKey = options.foreignKey
-          relatedModel = options.model
-        }
-
-        if (! relatedModel) {
-          throw Error('Cannot load hasMany relations for non-model!')
-        }
-
-        const related = await relatedModel.filterOnKey(foreignKey, id)
-
-        this[relation] = related
-          .map(relatedData => new relatedModel(relatedData))
+        // TODO: Use Promise.all instead. But bear race conditions in mind
+        await this.loadHasManyRelation(relation, hasMany[relation])
       }
+    }
+  }
+
+  async loadHasManyRelation(name, options) {
+    const { foreignKey, relatedModel } = this.constructor.parseHasManyOptions(options)
+
+    if (! relatedModel) {
+      throw Error('Cannot load hasMany relations for non-model!')
+    }
+
+    const related = await relatedModel.filterOnKey(foreignKey, this.id)
+
+    this[name] = related
+  }
+
+  static parseHasManyOptions(options) {
+    if (options.prototype instanceof Model) {
+      return {
+        foreignKey: table._name + '_id',
+        relatedModel: options
+      }
+    }
+    return {
+      foreignKey: options.foreignKey,
+      relatedModel: options.model
     }
   }
 
