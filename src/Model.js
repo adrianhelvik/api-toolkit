@@ -233,7 +233,24 @@ class Model {
     }
   }
 
+  static async oneWhere(whereClauses = {}) {
+    const dbQuery = table
+      .select(table.star())
+      .from(this.table)
+      .where(whereClauses)
+      .limit(1)
+
+    const query = dbQuery.text
+    const values = dbQuery.values
+
+    return this.db.query({ query, values })
+  }
+
   static async one(id) {
+    if (id && typeof id === 'object') {
+      return this.oneWhere(id)
+    }
+
     const query = this.createQueryForOne(id)
     const dbResponse = await this.db.query(query)
     const modelData = dbResponse[0]
