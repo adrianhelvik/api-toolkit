@@ -168,7 +168,7 @@ var Model = function () {
                           relatedModel = void 0;
 
 
-                          if (options instanceof Model) {
+                          if (options.prototype instanceof Model) {
                             foreignKey = table._name + '_id';
                             relatedModel = options;
                           } else {
