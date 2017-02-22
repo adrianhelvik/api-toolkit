@@ -155,18 +155,29 @@ var Model = function () {
                 _iteratorError = undefined;
                 _context3.prev = 6;
                 _loop = regeneratorRuntime.mark(function _loop() {
-                  var relation, foreignKey, relatedModel, related;
+                  var relation, options, foreignKey, relatedModel, related;
                   return regeneratorRuntime.wrap(function _loop$(_context2) {
                     while (1) {
                       switch (_context2.prev = _context2.next) {
                         case 0:
                           relation = _step.value;
-                          foreignKey = table._name + '_id';
-                          relatedModel = hasMany[relation];
-                          _context2.next = 5;
+                          options = hasMany[relation];
+                          foreignKey = void 0;
+                          relatedModel = void 0;
+
+
+                          if (options instanceof Model) {
+                            foreignKey = table._name + '_id';
+                            relatedModel = options;
+                          } else {
+                            foreignKey = options.foreignKey;
+                            relatedModel = options.model;
+                          }
+
+                          _context2.next = 7;
                           return relatedModel.filterOnKey(foreignKey, id);
 
-                        case 5:
+                        case 7:
                           related = _context2.sent;
 
 
@@ -174,7 +185,7 @@ var Model = function () {
                             return new relatedModel(relatedData);
                           });
 
-                        case 7:
+                        case 9:
                         case 'end':
                           return _context2.stop();
                       }
