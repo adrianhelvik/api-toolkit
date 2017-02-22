@@ -232,23 +232,31 @@ var Model = (_temp = _class = function () {
                 _constructor$parseHas = this.constructor.parseHasManyOptions(options), foreignKey = _constructor$parseHas.foreignKey, relatedModel = _constructor$parseHas.relatedModel;
 
                 if (relatedModel) {
-                  _context3.next = 3;
+                  _context3.next = 5;
                   break;
                 }
 
+                if (!(options.model && options.foreignKey)) {
+                  _context3.next = 4;
+                  break;
+                }
+
+                throw Error('[loadHasManyRelation]: You forget to create a mapping from a key to { model, options }');
+
+              case 4:
                 throw Error('Cannot load hasMany relations for non-model!');
 
-              case 3:
-                _context3.next = 5;
+              case 5:
+                _context3.next = 7;
                 return relatedModel.filterOnKey(foreignKey, this.id);
 
-              case 5:
+              case 7:
                 related = _context3.sent;
 
 
                 this[name] = related;
 
-              case 7:
+              case 9:
               case 'end':
                 return _context3.stop();
             }
@@ -733,8 +741,8 @@ var Model = (_temp = _class = function () {
       return filterOnKey;
     }()
   }, {
-    key: 'parseHasManyOptions',
-    value: function parseHasManyOptions(options) {
+    key: 'asManyOptions',
+    value: function asManyOptions(options) {
       var table = this.table;
 
       // TODO: Find better test
