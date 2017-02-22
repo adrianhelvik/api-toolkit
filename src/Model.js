@@ -171,6 +171,10 @@ class Model {
           relatedModel = options.model
         }
 
+        if (! relatedModel) {
+          throw Error('Cannot load hasMany relations for non-model!')
+        }
+
         const related = await relatedModel.filterOnKey(foreignKey, id)
 
         this[relation] = related
