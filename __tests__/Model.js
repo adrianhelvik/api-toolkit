@@ -172,52 +172,105 @@ describe('Model', () => {
       })
     })
     describe('.loadHasManyRelations()', () => {
-      class Book extends Model {
-        static table = 'Book'
-        static columns = ['id', 'title', 'bookshelf']
-        static db = {
-          query: jest.fn()
-        }
-      }
-
-      class Bookshelf extends Model {
-        static table = 'Bookshelf'
-        static columns = ['id']
-
-        static hasMany = {
-          books: {
-            model: Book,
-            foreignKey: 'bookshelf'
+      describe('with parameters: { model: Model, foreignKey: String }', () => {
+        class Book extends Model {
+          static table = 'Book'
+          static columns = ['id', 'title', 'bookshelf']
+          static db = {
+            query: jest.fn()
           }
         }
-        static db = {
-          query: jest.fn()
+
+        class Bookshelf extends Model {
+          static table = 'Bookshelf'
+          static columns = ['id']
+
+          static hasMany = {
+            books: {
+              model: Book,
+              foreignKey: 'bookshelf'
+            }
+          }
+          static db = {
+            query: jest.fn()
+          }
         }
-      }
+        let bookshelf
 
-      let bookshelf
-      beforeEach(async () => {
-        Bookshelf.db.query
-          .mockReturnValueOnce([{ id: 'bookshelf-id' }])
+        beforeEach(async () => {
+          Bookshelf.db.query
+            .mockReturnValueOnce([{ id: 'bookshelf-id' }])
 
-        bookshelf = await Bookshelf.one('bookshelf-id')
+          bookshelf = await Bookshelf.one('bookshelf-id')
 
-        Book.db.query
-          .mockReturnValueOnce([{
+          Book.db.query
+            .mockReturnValueOnce([{
+              id: 'book-id',
+              bookshelf: 'bookshelf-id',
+              title: 'Betty Boop'
+            }])
+
+          await bookshelf.loadHasManyRelations()
+        })
+
+        it('loads an array with the relation', () => {
+          expect(bookshelf.books).toEqual([{
             id: 'book-id',
             bookshelf: 'bookshelf-id',
             title: 'Betty Boop'
           }])
-
-        await bookshelf.loadHasManyRelations()
+        })
       })
 
-      it('loads an array with the relation', () => {
-        expect(bookshelf.books).toEqual([{
-          id: 'book-id',
-          bookshelf: 'bookshelf-id',
-          title: 'Betty Boop'
-        }])
+      describe('with parameters: model: Model', () => {
+        class Book extends Model {
+          static table = 'Book'
+          static columns = ['id', 'title', 'Bookshelf_id']
+          static db = {
+            query: jest.fn()
+          }
+        }
+
+        class Bookshelf extends Model {
+          static table = 'Bookshelf'
+          static columns = ['id']
+
+          static hasMany = {
+            books: Book
+          }
+          static db = {
+            query: jest.fn()
+          }
+        }
+
+        let bookshelf
+
+        beforeEach(async () => {
+          Bookshelf.db.query
+            .mockReturnValueOnce([{ id: 'bookshelf-id' }])
+
+          bookshelf = await Bookshelf.one('bookshelf-id')
+
+          Book.db.query
+            .mockReturnValueOnce([{
+              id: 'book-id',
+              Bookshelf_id: 'bookshelf-id',
+              title: 'Betty Boop'
+            }])
+
+          await bookshelf.loadHasManyRelations()
+        })
+
+        it('loads an array with the relation', () => {
+          expect(bookshelf).toEqual({
+            id: 'bookshelf-id',
+            books: [{
+              id: 'book-id',
+              Bookshelf_id: 'bookshelf-id',
+              title: 'Betty Boop'
+            }]
+          })
+        })
       })
     })
   })

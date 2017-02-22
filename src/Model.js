@@ -177,6 +177,8 @@ class Model {
   }
 
   static parseHasManyOptions(options) {
+    const { table } = this
+
     if (options.prototype instanceof Model) {
       return {
         foreignKey: table._name + '_id',
