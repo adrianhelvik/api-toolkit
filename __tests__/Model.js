@@ -331,6 +331,18 @@ describe('Model', () => {
 
         expect(book.bookshelf).toEqual(bookshelf)
       })
+
+      it('can be loaded twice', async () => {
+        let book = new Book({ id: 'book', bookshelf: 'the-bookshelf' })
+        let bookshelf = new Bookshelf({ id: 'the-bookshelf' })
+
+        Bookshelf.db.query.mockReturnValueOnce([bookshelf])
+
+        await book.loadHasOneRelations()
+        await book.loadHasOneRelations()
+
+        expect(book.bookshelf).toEqual(bookshelf)
+      })
     })
   })
 })

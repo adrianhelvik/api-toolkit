@@ -20,8 +20,6 @@ var _events2 = _interopRequireDefault(_events);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -149,74 +147,77 @@ var Model = (_temp = _class = function () {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                hasOne = this.hasOne;
+                hasOne = this.constructor.hasOne;
 
-                if (!hasOne) {
-                  _context2.next = 28;
+                if (hasOne) {
+                  _context2.next = 3;
                   break;
                 }
 
+                return _context2.abrupt('return');
+
+              case 3:
                 _iteratorNormalCompletion = true;
                 _didIteratorError = false;
                 _iteratorError = undefined;
-                _context2.prev = 5;
+                _context2.prev = 6;
                 _iterator = Object.keys(hasOne)[Symbol.iterator]();
 
-              case 7:
+              case 8:
                 if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                  _context2.next = 14;
+                  _context2.next = 15;
                   break;
                 }
 
                 relation = _step.value;
-                _context2.next = 11;
+                _context2.next = 12;
                 return this.loadHasOneRelation(relation, hasOne[relation]);
 
-              case 11:
+              case 12:
                 _iteratorNormalCompletion = true;
-                _context2.next = 7;
+                _context2.next = 8;
                 break;
 
-              case 14:
-                _context2.next = 20;
+              case 15:
+                _context2.next = 21;
                 break;
 
-              case 16:
-                _context2.prev = 16;
-                _context2.t0 = _context2['catch'](5);
+              case 17:
+                _context2.prev = 17;
+                _context2.t0 = _context2['catch'](6);
                 _didIteratorError = true;
                 _iteratorError = _context2.t0;
 
-              case 20:
-                _context2.prev = 20;
+              case 21:
                 _context2.prev = 21;
+                _context2.prev = 22;
 
                 if (!_iteratorNormalCompletion && _iterator.return) {
                   _iterator.return();
                 }
 
-              case 23:
-                _context2.prev = 23;
+              case 24:
+                _context2.prev = 24;
 
                 if (!_didIteratorError) {
-                  _context2.next = 26;
+                  _context2.next = 27;
                   break;
                 }
 
                 throw _iteratorError;
 
-              case 26:
-                return _context2.finish(23);
-
               case 27:
-                return _context2.finish(20);
+                return _context2.finish(24);
 
               case 28:
+                return _context2.finish(21);
+
+              case 29:
               case 'end':
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[5, 16, 20, 28], [21,, 23, 27]]);
+        }, _callee2, this, [[6, 17, 21, 29], [22,, 24, 28]]);
       }));
 
       function loadHasOneRelations() {
@@ -229,7 +230,7 @@ var Model = (_temp = _class = function () {
     key: 'loadHasOneRelation',
     value: function () {
       var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(relation, _ref4) {
-        var foreignKey = _ref4.foreignKey,
+        var ownKey = _ref4.ownKey,
             model = _ref4.model;
         var related;
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
@@ -237,7 +238,9 @@ var Model = (_temp = _class = function () {
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return model.oneWhere(_defineProperty({}, foreignKey, this.id));
+                return model.oneWhere({
+                  id: this[ownKey]
+                });
 
               case 2:
                 related = _context3.sent;

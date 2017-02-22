@@ -167,11 +167,16 @@ class Model {
   }
 
   async loadHasOneRelation(relation, { ownKey, model }) {
+    if (this[Symbol.for(relation)]) {
+      return
+    }
+
     const related = await model.oneWhere({
       id: this[ownKey]
     })
 
     this[relation] = related
+    this[Symbol.for(relation)] = true
   }
 
   async loadHasManyRelations() {
