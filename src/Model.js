@@ -162,7 +162,7 @@ class Model {
         try {
           await this.loadHasManyRelation(relation, hasMany[relation])
         } catch (err) {
-          if (hasMany[relation].model && hasMany[relation].foreignKey) {
+          if (hasMany.model && hasMany.foreignKey) {
             throw Error('[loadHasManyRelation]: You forget to create a mapping from a key to { model, options }')
           }
           throw err
