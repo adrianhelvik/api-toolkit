@@ -179,12 +179,26 @@ class Model {
   static parseHasManyOptions(options) {
     const { table } = this
 
-    if (options.prototype instanceof Model) {
+    // TODO: Find better test
+    const optionsIsModel = Boolean(
+      options.parseHasManyOptions
+    )
+
+    if (optionsIsModel) {
       return {
         foreignKey: table._name + '_id',
         relatedModel: options
       }
     }
+
+    if (! options.foreignKey) {
+      throw Error('[parseHasManyOptions]: Foreign key not specified for relation. Got: ' + String(options))
+    }
+
+    if (! options.model) {
+      throw Error('[parseHasManyOptions]: Model not specified for relation. Got: ' + String(options))
+    }
+
     return {
       foreignKey: options.foreignKey,
       relatedModel: options.model
