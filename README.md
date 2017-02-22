@@ -7,7 +7,7 @@ import { Model } from '@adrianhelvik/api-toolkit'
 import express from 'express'
 import { Article } from './models'
 
-Model.db = ‹...›; // TODO: Create better description
+Model.db = ‹...› // Instance of DatabaseInterface
 
 const app = express()
 
@@ -36,3 +36,20 @@ class ArticleCtrl extends Controller {
   static model = Article
 }
 ```
+
+```typescript
+interface DatabaseInterface {
+  query({text: string, values: array<Any> }): { rows: Array<object> }
+}
+```
+
+# Caveats
+
+- Currently only supports Postgres
+- 
+
+# Test
+
+`npm test`
+`npm test:watch`
+`npm test:coverage`
