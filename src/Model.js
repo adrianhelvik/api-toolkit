@@ -159,17 +159,17 @@ class Model {
 
     if (hasOne) {
       for (const relation of Object.keys(hasOne)) {
-        await this.loadHasOneRelation(relation)
+        await this.loadHasOneRelation(relation, hasOne[relation])
       }
     }
   }
 
-  async loadHasOneRelation(relation) {
-    const { foreignKey, model } = relation
-
-    await model.oneWhere({
+  async loadHasOneRelation(relation, { foreignKey, model }) {
+    const related = await model.oneWhere({
       [foreignKey]: this.id
     })
+
+    this[relation] = related
   }
 
   async loadHasManyRelations() {
