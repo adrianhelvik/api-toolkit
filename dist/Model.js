@@ -745,7 +745,7 @@ var Model = function () {
           while (1) {
             switch (_context12.prev = _context12.next) {
               case 0:
-                dbQuery = this.table.select(this.table.star()).from(this.table).where(whereClauses).limit(1);
+                dbQuery = this.table.select(this.table.star()).from(this.table).where(whereClauses).limit(1).toQuery();
                 query = dbQuery.text;
                 values = dbQuery.values;
                 return _context12.abrupt('return', this.db.query({ query: query, values: values }));
