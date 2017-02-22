@@ -3,14 +3,18 @@
 ```javascript
 // entry.js
 
-import { Model } from '@adrianhelvik/api-toolkit'
+import { Model, Database } from '@adrianhelvik/api-toolkit'
+
+Model.db = Database.postgres({
+  database: 'some_database',
+  username: 'user',
+  password: 'pass'
+})
+
 import express from 'express'
-import { Article } from './models'
-
-Model.db = ‹...› // Instance of DatabaseInterface
-
 const app = express()
 
+import { Article } from './models'
 app.use(Article.resource('/articles'))
 
 app.listen(3000)
