@@ -741,8 +741,8 @@ var Model = (_temp = _class = function () {
       return filterOnKey;
     }()
   }, {
-    key: 'asManyOptions',
-    value: function asManyOptions(options) {
+    key: 'parseHasManyOptions',
+    value: function parseHasManyOptions(options) {
       var table = this.table;
 
       // TODO: Find better test
