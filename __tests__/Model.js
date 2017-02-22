@@ -23,7 +23,7 @@ describe('Model', () => {
 
           const query = ConcreteModel.createQueryForOne('some-id')
 
-          expect(query.text).toBe(expectedSql)
+          expect(query.query).toBe(expectedSql)
           expect(query.values).toEqual([id])
         })
       })
@@ -47,7 +47,7 @@ describe('Model', () => {
 
           const query = ConcreteModel.createQueryForAll()
 
-          expect(query.text).toBe(expectedSql)
+          expect(query.query).toBe(expectedSql)
           expect(query.values).toEqual([])
         })
       })
@@ -83,7 +83,7 @@ describe('Model', () => {
 
         expect(actualNewInstance.id).toBe(newInstance.id)
         expect(actualNewInstance instanceof ConcreteModel).toBeTruthy()
-        expect(ConcreteModel.db.query).toBeCalledWith({ text: expectedSql, values: expectedValues })
+        expect(ConcreteModel.db.query).toBeCalledWith({ query: expectedSql, values: expectedValues })
       })
 
       it('throws an error if there are no updates', async () => {
@@ -107,7 +107,7 @@ describe('Model', () => {
       it('creates the correct sql', () => {
         const query = ConcreteModel.createQueryForDestroy(id)
 
-        expect(query.text).toBe(expectedSql)
+        expect(query.query).toBe(expectedSql)
         expect(query.values).toEqual(expectedValues)
       })
 
@@ -118,7 +118,7 @@ describe('Model', () => {
         await ConcreteModel.destroy(id)
 
         expect(ConcreteModel.db.query).toBeCalledWith({
-          text: expectedSql,
+          query: expectedSql,
           values: expectedValues
         })
       })
@@ -139,7 +139,7 @@ describe('Model', () => {
 
       it('inserts an instance into the database', () => {
         expect(ConcreteModel.db.query).toBeCalledWith({
-          text: 'INSERT INTO "some-table" ("name", "role") VALUES ($1, $2) RETURNING *',
+          query: 'INSERT INTO "some-table" ("name", "role") VALUES ($1, $2) RETURNING *',
           values: ['some-name', 'some-role']
         })
       })
@@ -184,12 +184,14 @@ describe('Model', () => {
         await instance.save()
 
         expect(ConcreteModel.db.query).toBeCalledWith({
-          text: 'INSERT INTO "some-table" ("role") VALUES ($1) RETURNING *',
+          query: 'INSERT INTO "some-table" ("role") VALUES ($1) RETURNING *',
           values: ['some-role']
         })
       })
     })
-    describe('.destroy()')
-    describe('.loadRelations()')
+    describe('.destroy()', () => {
+    })
+    describe('.loadRelations()', () => {
+    })
   })
 })

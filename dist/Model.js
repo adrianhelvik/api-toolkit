@@ -20,12 +20,24 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-_sql2.default.setDialect('postgres');
-
 // TODO: Refactor
-
 var Model = function () {
   _createClass(Model, null, [{
+    key: 'setDialect',
+
+
+    /**
+     * Set the type of database that is used.
+     */
+    value: function setDialect(dialect) {
+      _sql2.default.setDialect(dialect);
+    }
+
+    /**
+     * Create an event emitter on demand to isolate it to each subclass
+     */
+
+  }, {
     key: 'on',
     value: function on() {
       var _eventEmitter;
@@ -58,11 +70,6 @@ var Model = function () {
     }
   }, {
     key: '_eventEmitter',
-
-
-    /**
-     * Create an event emitter on demand to isolate it to each subclass
-     */
     get: function get() {
       if (!this.__eventEmitter) {
         this.__eventEmitter = new _events2.default();
@@ -294,7 +301,7 @@ var Model = function () {
                           dbResponse = _context4.sent;
 
 
-                          _this2[relation] = dbResponse.rows.map(function (data) {
+                          _this2[relation] = dbResponse.map(function (data) {
                             return new relatedModel(data);
                           });
 
@@ -417,7 +424,7 @@ var Model = function () {
 
               case 5:
                 dbResponse = _context6.sent;
-                newColumns = dbResponse.rows[0];
+                newColumns = dbResponse[0];
 
 
                 Object.assign(this, newColumns);
@@ -546,7 +553,7 @@ var Model = function () {
 
               case 8:
                 dbResponse = _context9.sent;
-                instances = dbResponse.rows.map(function (data) {
+                instances = dbResponse.map(function (data) {
                   return new _this3(data);
                 });
 
@@ -714,7 +721,7 @@ var Model = function () {
 
               case 3:
                 dbResponse = _context12.sent;
-                modelData = dbResponse.rows[0];
+                modelData = dbResponse[0];
 
                 if (modelData) {
                   _context12.next = 7;

@@ -83,7 +83,10 @@ class Model {
 
     query = query.toQuery()
 
-    return query
+    return {
+      query: query.text,
+      values: query.values
+    }
   }
 
   static async all(whereClauses = null) {
@@ -97,8 +100,8 @@ class Model {
     if (! query) {
       throw Error('Model#executeQueryAndCreateInstances called without a query')
     }
-    if (! query.text) {
-      throw Error('Model#executeQueryAndCreateInstances called without query.text')
+    if (! query.query) {
+      throw Error('Model#executeQueryAndCreateInstances called without query.query')
     }
     if (! query.values) {
       throw Error('Model#executeQueryAndCreateInstances called without query.values')
@@ -180,15 +183,13 @@ class Model {
         const relatedTable = relatedModel.table
 
         const query = {
-          text: `
+          query: `
             SELECT * FROM "${nameOfPivotTable}"
             JOIN "${tableNameOfRelated}"
             ON "${nameOfPivotTable}"."${keyOfRelated}"="${tableNameOfRelated}"."id"
           `,
           values: []
         }
-
-        console.log(query.text.split('\n'))
 
         const dbResponse = await this.constructor.db.query(query)
 
@@ -208,7 +209,10 @@ class Model {
       .limit(1)
       .toQuery()
 
-    return query
+    return {
+      query: query.text,
+      values: query.values
+    }
   }
 
   static async one(id) {
@@ -245,7 +249,11 @@ class Model {
       .returning(table.star())
       .toQuery()
 
-    const dbResponse = await this.constructor.db.query(query)
+    const dbResponse = await this.constructor.db.query({
+      query: query.text,
+      values: query.values
+    })
+
     const newColumns = dbResponse[0]
 
     Object.assign(this, newColumns)
@@ -268,7 +276,10 @@ class Model {
       .where(table.id.equals(id))
       .toQuery()
 
-    return query
+    return {
+      query: query.text,
+      values: query.values
+    }
   }
 
   static async destroy(id) {
@@ -292,7 +303,10 @@ class Model {
       .where(table.id.equals(id))
       .toQuery()
 
-    return query
+    return {
+      query: query.text,
+      values: query.values
+    }
   }
 
   static async update(id, updates = {}) {
