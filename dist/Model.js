@@ -287,17 +287,13 @@ var Model = function () {
                           });
                           relatedTable = relatedModel.table;
                           query = {
-                            text: '\n            SELECT * FROM "' + nameOfPivotTable + '"\n            JOIN "' + tableNameOfRelated + '"\n            ON "' + nameOfPivotTable + '"."' + keyOfRelated + '"="' + tableNameOfRelated + '"."id"\n          ',
+                            query: '\n            SELECT * FROM "' + nameOfPivotTable + '"\n            JOIN "' + tableNameOfRelated + '"\n            ON "' + nameOfPivotTable + '"."' + keyOfRelated + '"="' + tableNameOfRelated + '"."id"\n          ',
                             values: []
                           };
-
-
-                          console.log(query.text.split('\n'));
-
-                          _context4.next = 13;
+                          _context4.next = 12;
                           return _this2.constructor.db.query(query);
 
-                        case 13:
+                        case 12:
                           dbResponse = _context4.sent;
 
 
@@ -305,7 +301,7 @@ var Model = function () {
                             return new relatedModel(data);
                           });
 
-                        case 15:
+                        case 14:
                         case 'end':
                           return _context4.stop();
                       }
@@ -420,7 +416,10 @@ var Model = function () {
                 values = this.extractValues();
                 query = table.insert(values).returning(table.star()).toQuery();
                 _context6.next = 5;
-                return this.constructor.db.query(query);
+                return this.constructor.db.query({
+                  query: query.text,
+                  values: query.values
+                });
 
               case 5:
                 dbResponse = _context6.sent;
@@ -482,7 +481,10 @@ var Model = function () {
 
       query = query.toQuery();
 
-      return query;
+      return {
+        query: query.text,
+        values: query.values
+      };
     }
   }, {
     key: 'all',
@@ -532,12 +534,12 @@ var Model = function () {
                 throw Error('Model#executeQueryAndCreateInstances called without a query');
 
               case 2:
-                if (query.text) {
+                if (query.query) {
                   _context9.next = 4;
                   break;
                 }
 
-                throw Error('Model#executeQueryAndCreateInstances called without query.text');
+                throw Error('Model#executeQueryAndCreateInstances called without query.query');
 
               case 4:
                 if (query.values) {
@@ -704,7 +706,10 @@ var Model = function () {
 
       var query = table.select(table.star()).from(table).where(table.id.equals(id)).limit(1).toQuery();
 
-      return query;
+      return {
+        query: query.text,
+        values: query.values
+      };
     }
   }, {
     key: 'one',
@@ -789,7 +794,10 @@ var Model = function () {
 
       var query = table.delete().where(table.id.equals(id)).toQuery();
 
-      return query;
+      return {
+        query: query.text,
+        values: query.values
+      };
     }
   }, {
     key: 'destroy',
@@ -835,7 +843,10 @@ var Model = function () {
 
       var query = table.update(updates).where(table.id.equals(id)).toQuery();
 
-      return query;
+      return {
+        query: query.text,
+        values: query.values
+      };
     }
   }, {
     key: 'update',
