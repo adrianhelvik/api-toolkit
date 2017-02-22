@@ -8,6 +8,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _class, _temp;
+
 var _sql = require('sql');
 
 var _sql2 = _interopRequireDefault(_sql);
@@ -22,8 +24,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-// TODO: Refactor
-var Model = function () {
+var Model = (_temp = _class = function () {
   _createClass(Model, null, [{
     key: 'setDialect',
 
@@ -136,127 +137,80 @@ var Model = function () {
     key: 'loadHasManyRelations',
     value: function () {
       var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
-        var _this = this;
+        var _constructor, hasMany, table, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, relation;
 
-        var _constructor, hasMany, table, id, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _loop, _iterator, _step;
-
-        return regeneratorRuntime.wrap(function _callee2$(_context3) {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
                 _constructor = this.constructor, hasMany = _constructor.hasMany, table = _constructor.table;
-                id = this.id;
 
                 if (!hasMany) {
-                  _context3.next = 28;
+                  _context2.next = 28;
                   break;
                 }
 
                 _iteratorNormalCompletion = true;
                 _didIteratorError = false;
                 _iteratorError = undefined;
-                _context3.prev = 6;
-                _loop = regeneratorRuntime.mark(function _loop() {
-                  var relation, options, foreignKey, relatedModel, related;
-                  return regeneratorRuntime.wrap(function _loop$(_context2) {
-                    while (1) {
-                      switch (_context2.prev = _context2.next) {
-                        case 0:
-                          relation = _step.value;
-                          options = hasMany[relation];
-                          foreignKey = void 0;
-                          relatedModel = void 0;
-
-
-                          if (options.prototype instanceof Model) {
-                            foreignKey = table._name + '_id';
-                            relatedModel = options;
-                          } else {
-                            foreignKey = options.foreignKey;
-                            relatedModel = options.model;
-                          }
-
-                          if (relatedModel) {
-                            _context2.next = 7;
-                            break;
-                          }
-
-                          throw Error('Cannot load hasMany relations for non-model!');
-
-                        case 7:
-                          _context2.next = 9;
-                          return relatedModel.filterOnKey(foreignKey, id);
-
-                        case 9:
-                          related = _context2.sent;
-
-
-                          _this[relation] = related.map(function (relatedData) {
-                            return new relatedModel(relatedData);
-                          });
-
-                        case 11:
-                        case 'end':
-                          return _context2.stop();
-                      }
-                    }
-                  }, _loop, _this);
-                });
+                _context2.prev = 5;
                 _iterator = Object.keys(hasMany)[Symbol.iterator]();
 
-              case 9:
+              case 7:
                 if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                  _context3.next = 14;
+                  _context2.next = 14;
                   break;
                 }
 
-                return _context3.delegateYield(_loop(), 't0', 11);
+                relation = _step.value;
+                _context2.next = 11;
+                return this.loadHasManyRelation(relation, hasMany[relation]);
 
               case 11:
                 _iteratorNormalCompletion = true;
-                _context3.next = 9;
+                _context2.next = 7;
                 break;
 
               case 14:
-                _context3.next = 20;
+                _context2.next = 20;
                 break;
 
               case 16:
-                _context3.prev = 16;
-                _context3.t1 = _context3['catch'](6);
+                _context2.prev = 16;
+                _context2.t0 = _context2['catch'](5);
                 _didIteratorError = true;
-                _iteratorError = _context3.t1;
+                _iteratorError = _context2.t0;
 
               case 20:
-                _context3.prev = 20;
-                _context3.prev = 21;
+                _context2.prev = 20;
+                _context2.prev = 21;
 
                 if (!_iteratorNormalCompletion && _iterator.return) {
                   _iterator.return();
                 }
 
               case 23:
-                _context3.prev = 23;
+                _context2.prev = 23;
 
                 if (!_didIteratorError) {
-                  _context3.next = 26;
+                  _context2.next = 26;
                   break;
                 }
 
                 throw _iteratorError;
 
               case 26:
-                return _context3.finish(23);
+                return _context2.finish(23);
 
               case 27:
-                return _context3.finish(20);
+                return _context2.finish(20);
 
               case 28:
               case 'end':
-                return _context3.stop();
+                return _context2.stop();
             }
           }
-        }, _callee2, this, [[6, 16, 20, 28], [21,, 23, 27]]);
+        }, _callee2, this, [[5, 16, 20, 28], [21,, 23, 27]]);
       }));
 
       function loadHasManyRelations() {
@@ -266,14 +220,57 @@ var Model = function () {
       return loadHasManyRelations;
     }()
   }, {
+    key: 'loadHasManyRelation',
+    value: function () {
+      var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(name, options) {
+        var _constructor$parseHas, foreignKey, relatedModel, related;
+
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _constructor$parseHas = this.constructor.parseHasManyOptions(options), foreignKey = _constructor$parseHas.foreignKey, relatedModel = _constructor$parseHas.relatedModel;
+
+                if (relatedModel) {
+                  _context3.next = 3;
+                  break;
+                }
+
+                throw Error('Cannot load hasMany relations for non-model!');
+
+              case 3:
+                _context3.next = 5;
+                return relatedModel.filterOnKey(foreignKey, this.id);
+
+              case 5:
+                related = _context3.sent;
+
+
+                this[name] = related;
+
+              case 7:
+              case 'end':
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function loadHasManyRelation(_x, _x2) {
+        return _ref3.apply(this, arguments);
+      }
+
+      return loadHasManyRelation;
+    }()
+  }, {
     key: 'loadManyToManyRelations',
     value: function () {
-      var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
-        var _this2 = this;
+      var _ref4 = _asyncToGenerator(regeneratorRuntime.mark(function _callee4() {
+        var _this = this;
 
-        var _constructor2, manyToMany, table, id, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _loop2, _iterator2, _step2;
+        var _constructor2, manyToMany, table, id, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _loop, _iterator2, _step2;
 
-        return regeneratorRuntime.wrap(function _callee3$(_context5) {
+        return regeneratorRuntime.wrap(function _callee4$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
@@ -289,9 +286,9 @@ var Model = function () {
                 _didIteratorError2 = false;
                 _iteratorError2 = undefined;
                 _context5.prev = 6;
-                _loop2 = regeneratorRuntime.mark(function _loop2() {
+                _loop = regeneratorRuntime.mark(function _loop() {
                   var relation, relatedModel, tableNameOfThis, tableNameOfRelated, nameOfPivotTable, keyOfThis, keyOfRelated, pivotTable, relatedTable, query, dbResponse;
-                  return regeneratorRuntime.wrap(function _loop2$(_context4) {
+                  return regeneratorRuntime.wrap(function _loop$(_context4) {
                     while (1) {
                       switch (_context4.prev = _context4.next) {
                         case 0:
@@ -312,13 +309,13 @@ var Model = function () {
                             values: []
                           };
                           _context4.next = 12;
-                          return _this2.constructor.db.query(query);
+                          return _this.constructor.db.query(query);
 
                         case 12:
                           dbResponse = _context4.sent;
 
 
-                          _this2[relation] = dbResponse.map(function (data) {
+                          _this[relation] = dbResponse.map(function (data) {
                             return new relatedModel(data);
                           });
 
@@ -327,7 +324,7 @@ var Model = function () {
                           return _context4.stop();
                       }
                     }
-                  }, _loop2, _this2);
+                  }, _loop, _this);
                 });
                 _iterator2 = Object.keys(manyToMany)[Symbol.iterator]();
 
@@ -337,7 +334,7 @@ var Model = function () {
                   break;
                 }
 
-                return _context5.delegateYield(_loop2(), 't0', 11);
+                return _context5.delegateYield(_loop(), 't0', 11);
 
               case 11:
                 _iteratorNormalCompletion2 = true;
@@ -383,11 +380,11 @@ var Model = function () {
                 return _context5.stop();
             }
           }
-        }, _callee3, this, [[6, 16, 20, 28], [21,, 23, 27]]);
+        }, _callee4, this, [[6, 16, 20, 28], [21,, 23, 27]]);
       }));
 
       function loadManyToManyRelations() {
-        return _ref3.apply(this, arguments);
+        return _ref4.apply(this, arguments);
       }
 
       return loadManyToManyRelations;
@@ -427,9 +424,9 @@ var Model = function () {
   }, {
     key: 'save',
     value: function () {
-      var _ref4 = _asyncToGenerator(regeneratorRuntime.mark(function _callee4() {
+      var _ref5 = _asyncToGenerator(regeneratorRuntime.mark(function _callee5() {
         var table, values, query, dbResponse, newColumns;
-        return regeneratorRuntime.wrap(function _callee4$(_context6) {
+        return regeneratorRuntime.wrap(function _callee5$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
               case 0:
@@ -454,11 +451,11 @@ var Model = function () {
                 return _context6.stop();
             }
           }
-        }, _callee4, this);
+        }, _callee5, this);
       }));
 
       function save() {
-        return _ref4.apply(this, arguments);
+        return _ref5.apply(this, arguments);
       }
 
       return save;
@@ -466,8 +463,8 @@ var Model = function () {
   }, {
     key: 'destroy',
     value: function () {
-      var _ref5 = _asyncToGenerator(regeneratorRuntime.mark(function _callee5() {
-        return regeneratorRuntime.wrap(function _callee5$(_context7) {
+      var _ref6 = _asyncToGenerator(regeneratorRuntime.mark(function _callee6() {
+        return regeneratorRuntime.wrap(function _callee6$(_context7) {
           while (1) {
             switch (_context7.prev = _context7.next) {
               case 0:
@@ -479,11 +476,11 @@ var Model = function () {
                 return _context7.stop();
             }
           }
-        }, _callee5, this);
+        }, _callee6, this);
       }));
 
       function destroy() {
-        return _ref5.apply(this, arguments);
+        return _ref6.apply(this, arguments);
       }
 
       return destroy;
@@ -510,10 +507,10 @@ var Model = function () {
   }, {
     key: 'all',
     value: function () {
-      var _ref6 = _asyncToGenerator(regeneratorRuntime.mark(function _callee6() {
+      var _ref7 = _asyncToGenerator(regeneratorRuntime.mark(function _callee7() {
         var whereClauses = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
         var query, instances;
-        return regeneratorRuntime.wrap(function _callee6$(_context8) {
+        return regeneratorRuntime.wrap(function _callee7$(_context8) {
           while (1) {
             switch (_context8.prev = _context8.next) {
               case 0:
@@ -526,11 +523,11 @@ var Model = function () {
                 return _context8.stop();
             }
           }
-        }, _callee6, this);
+        }, _callee7, this);
       }));
 
       function all() {
-        return _ref6.apply(this, arguments);
+        return _ref7.apply(this, arguments);
       }
 
       return all;
@@ -538,12 +535,12 @@ var Model = function () {
   }, {
     key: 'executeQueryAndCreateInstances',
     value: function () {
-      var _ref7 = _asyncToGenerator(regeneratorRuntime.mark(function _callee7(query) {
-        var _this3 = this;
+      var _ref8 = _asyncToGenerator(regeneratorRuntime.mark(function _callee8(query) {
+        var _this2 = this;
 
         var dbResponse, instances, _iteratorNormalCompletion4, _didIteratorError4, _iteratorError4, _iterator4, _step4, instance;
 
-        return regeneratorRuntime.wrap(function _callee7$(_context9) {
+        return regeneratorRuntime.wrap(function _callee8$(_context9) {
           while (1) {
             switch (_context9.prev = _context9.next) {
               case 0:
@@ -577,7 +574,7 @@ var Model = function () {
               case 8:
                 dbResponse = _context9.sent;
                 instances = dbResponse.map(function (data) {
-                  return new _this3(data);
+                  return new _this2(data);
                 });
 
                 if (!this.eagerLoadRelations) {
@@ -648,11 +645,11 @@ var Model = function () {
                 return _context9.stop();
             }
           }
-        }, _callee7, this, [[14, 25, 29, 37], [30,, 32, 36]]);
+        }, _callee8, this, [[14, 25, 29, 37], [30,, 32, 36]]);
       }));
 
-      function executeQueryAndCreateInstances(_x2) {
-        return _ref7.apply(this, arguments);
+      function executeQueryAndCreateInstances(_x4) {
+        return _ref8.apply(this, arguments);
       }
 
       return executeQueryAndCreateInstances;
@@ -665,9 +662,9 @@ var Model = function () {
   }, {
     key: 'query',
     value: function () {
-      var _ref8 = _asyncToGenerator(regeneratorRuntime.mark(function _callee8(closure) {
+      var _ref9 = _asyncToGenerator(regeneratorRuntime.mark(function _callee9(closure) {
         var table, query;
-        return regeneratorRuntime.wrap(function _callee8$(_context10) {
+        return regeneratorRuntime.wrap(function _callee9$(_context10) {
           while (1) {
             switch (_context10.prev = _context10.next) {
               case 0:
@@ -684,11 +681,11 @@ var Model = function () {
                 return _context10.stop();
             }
           }
-        }, _callee8, this);
+        }, _callee9, this);
       }));
 
-      function query(_x3) {
-        return _ref8.apply(this, arguments);
+      function query(_x5) {
+        return _ref9.apply(this, arguments);
       }
 
       return query;
@@ -696,9 +693,9 @@ var Model = function () {
   }, {
     key: 'filterOnKey',
     value: function () {
-      var _ref9 = _asyncToGenerator(regeneratorRuntime.mark(function _callee9(key, val) {
-        var query;
-        return regeneratorRuntime.wrap(function _callee9$(_context11) {
+      var _ref10 = _asyncToGenerator(regeneratorRuntime.mark(function _callee10(key, val) {
+        var query, matches;
+        return regeneratorRuntime.wrap(function _callee10$(_context11) {
           while (1) {
             switch (_context11.prev = _context11.next) {
               case 0:
@@ -711,25 +708,44 @@ var Model = function () {
 
               case 2:
                 query = this.table.select(this.table.star()).from(this.table).where(this.table[key].equals(val)).toQuery();
-                return _context11.abrupt('return', this.executeQueryAndCreateInstances({
+                _context11.next = 5;
+                return this.executeQueryAndCreateInstances({
                   query: query.text,
                   values: query.values
-                }));
+                });
 
-              case 4:
+              case 5:
+                matches = _context11.sent;
+                return _context11.abrupt('return', matches);
+
+              case 7:
               case 'end':
                 return _context11.stop();
             }
           }
-        }, _callee9, this);
+        }, _callee10, this);
       }));
 
-      function filterOnKey(_x4, _x5) {
-        return _ref9.apply(this, arguments);
+      function filterOnKey(_x6, _x7) {
+        return _ref10.apply(this, arguments);
       }
 
       return filterOnKey;
     }()
+  }, {
+    key: 'parseHasManyOptions',
+    value: function parseHasManyOptions(options) {
+      if (options.prototype instanceof Model) {
+        return {
+          foreignKey: table._name + '_id',
+          relatedModel: options
+        };
+      }
+      return {
+        foreignKey: options.foreignKey,
+        relatedModel: options.model
+      };
+    }
   }, {
     key: 'createQueryForOne',
     value: function createQueryForOne(id) {
@@ -746,10 +762,10 @@ var Model = function () {
   }, {
     key: 'oneWhere',
     value: function () {
-      var _ref10 = _asyncToGenerator(regeneratorRuntime.mark(function _callee10() {
+      var _ref11 = _asyncToGenerator(regeneratorRuntime.mark(function _callee11() {
         var whereClauses = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         var dbQuery, query, values, dbResponse;
-        return regeneratorRuntime.wrap(function _callee10$(_context12) {
+        return regeneratorRuntime.wrap(function _callee11$(_context12) {
           while (1) {
             switch (_context12.prev = _context12.next) {
               case 0:
@@ -768,11 +784,11 @@ var Model = function () {
                 return _context12.stop();
             }
           }
-        }, _callee10, this);
+        }, _callee11, this);
       }));
 
       function oneWhere() {
-        return _ref10.apply(this, arguments);
+        return _ref11.apply(this, arguments);
       }
 
       return oneWhere;
@@ -780,9 +796,9 @@ var Model = function () {
   }, {
     key: 'one',
     value: function () {
-      var _ref11 = _asyncToGenerator(regeneratorRuntime.mark(function _callee11(id) {
+      var _ref12 = _asyncToGenerator(regeneratorRuntime.mark(function _callee12(id) {
         var query, dbResponse, modelData, instance;
-        return regeneratorRuntime.wrap(function _callee11$(_context13) {
+        return regeneratorRuntime.wrap(function _callee12$(_context13) {
           while (1) {
             switch (_context13.prev = _context13.next) {
               case 0:
@@ -818,11 +834,11 @@ var Model = function () {
                 return _context13.stop();
             }
           }
-        }, _callee11, this);
+        }, _callee12, this);
       }));
 
-      function one(_x7) {
-        return _ref11.apply(this, arguments);
+      function one(_x9) {
+        return _ref12.apply(this, arguments);
       }
 
       return one;
@@ -830,9 +846,9 @@ var Model = function () {
   }, {
     key: 'create',
     value: function () {
-      var _ref12 = _asyncToGenerator(regeneratorRuntime.mark(function _callee12(fields) {
+      var _ref13 = _asyncToGenerator(regeneratorRuntime.mark(function _callee13(fields) {
         var instance;
-        return regeneratorRuntime.wrap(function _callee12$(_context14) {
+        return regeneratorRuntime.wrap(function _callee13$(_context14) {
           while (1) {
             switch (_context14.prev = _context14.next) {
               case 0:
@@ -851,11 +867,11 @@ var Model = function () {
                 return _context14.stop();
             }
           }
-        }, _callee12, this);
+        }, _callee13, this);
       }));
 
-      function create(_x8) {
-        return _ref12.apply(this, arguments);
+      function create(_x10) {
+        return _ref13.apply(this, arguments);
       }
 
       return create;
@@ -876,9 +892,9 @@ var Model = function () {
   }, {
     key: 'destroy',
     value: function () {
-      var _ref13 = _asyncToGenerator(regeneratorRuntime.mark(function _callee13(id) {
+      var _ref14 = _asyncToGenerator(regeneratorRuntime.mark(function _callee14(id) {
         var removedData, query;
-        return regeneratorRuntime.wrap(function _callee13$(_context15) {
+        return regeneratorRuntime.wrap(function _callee14$(_context15) {
           while (1) {
             switch (_context15.prev = _context15.next) {
               case 0:
@@ -900,11 +916,11 @@ var Model = function () {
                 return _context15.stop();
             }
           }
-        }, _callee13, this);
+        }, _callee14, this);
       }));
 
-      function destroy(_x9) {
-        return _ref13.apply(this, arguments);
+      function destroy(_x11) {
+        return _ref14.apply(this, arguments);
       }
 
       return destroy;
@@ -925,10 +941,10 @@ var Model = function () {
   }, {
     key: 'update',
     value: function () {
-      var _ref14 = _asyncToGenerator(regeneratorRuntime.mark(function _callee14(id) {
+      var _ref15 = _asyncToGenerator(regeneratorRuntime.mark(function _callee15(id) {
         var updates = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
         var error, query, newValue;
-        return regeneratorRuntime.wrap(function _callee14$(_context16) {
+        return regeneratorRuntime.wrap(function _callee15$(_context16) {
           while (1) {
             switch (_context16.prev = _context16.next) {
               case 0:
@@ -962,11 +978,11 @@ var Model = function () {
                 return _context16.stop();
             }
           }
-        }, _callee14, this);
+        }, _callee15, this);
       }));
 
-      function update(_x10) {
-        return _ref14.apply(this, arguments);
+      function update(_x12) {
+        return _ref15.apply(this, arguments);
       }
 
       return update;
@@ -974,9 +990,5 @@ var Model = function () {
   }]);
 
   return Model;
-}();
-
-Model._table = null;
-Model.db = null;
-Model.eagerLoadRelations = false;
+}(), _class._table = null, _class.db = null, _class.eagerLoadRelations = false, _temp);
 exports.default = Model;
