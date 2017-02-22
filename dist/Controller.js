@@ -289,6 +289,18 @@ var Controller = function () {
     }
 
     /**
+     * Create a static alias accepting the parameters (req, res)
+     * that forwards the method call to a new instance of the
+     * controller.
+     */
+
+  }, {
+    key: 'createStatic',
+    value: function createStatic(methodName) {
+      this[methodName] = this[routeHandlerFactory](methodName);
+    }
+
+    /**
      * @private
      */
 
@@ -306,7 +318,7 @@ var Controller = function () {
         for (var _iterator = routeMethods[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var methodName = _step.value;
 
-          this[methodName] = this[routeHandlerFactory](methodName);
+          this.createStatic(methodName);
         }
       } catch (err) {
         _didIteratorError = true;
