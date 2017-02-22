@@ -141,7 +141,10 @@ class Model {
       .where(this.table[key].equals(val))
       .toQuery()
 
-    return this.executeQueryAndCreateInstances(query)
+    return this.executeQueryAndCreateInstances({
+      query: query.text,
+      values: query.values
+    })
   }
 
   async loadRelations() {
