@@ -1,6 +1,11 @@
 class PostgresDatabase {
   constructor(userSettings) {
 
+    userSettings = {
+      ...userSettings,
+      user: userSettings.username
+    }
+
     // Load dependencies on demand only
     const pg = require('pg')
     const Pool = require('pg-pool')
