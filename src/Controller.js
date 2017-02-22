@@ -121,6 +121,15 @@ class Controller {
   }
 
   /**
+   * Create a static alias accepting the parameters (req, res)
+   * that forwards the method call to a new instance of the
+   * controller.
+   */
+  static createStatic(methodName) {
+    this[methodName] = this[routeHandlerFactory](methodName)
+  }
+
+  /**
    * @private
    */
   static [createStaticRouteHandlers]() {
@@ -128,7 +137,7 @@ class Controller {
     const routeMethods = ['create', 'all', 'one', 'destroy', 'update']
 
     for (const methodName of routeMethods) {
-      this[methodName] = this[routeHandlerFactory](methodName)
+      this.createStatic(methodName)
     }
   }
 
