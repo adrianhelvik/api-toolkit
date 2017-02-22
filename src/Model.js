@@ -239,6 +239,7 @@ class Model {
       .from(this.table)
       .where(whereClauses)
       .limit(1)
+      .toQuery()
 
     const query = dbQuery.text
     const values = dbQuery.values
