@@ -740,7 +740,7 @@ var Model = function () {
     value: function () {
       var _ref10 = _asyncToGenerator(regeneratorRuntime.mark(function _callee10() {
         var whereClauses = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-        var dbQuery, query, values;
+        var dbQuery, query, values, dbResponse;
         return regeneratorRuntime.wrap(function _callee10$(_context12) {
           while (1) {
             switch (_context12.prev = _context12.next) {
@@ -748,9 +748,14 @@ var Model = function () {
                 dbQuery = this.table.select(this.table.star()).from(this.table).where(whereClauses).limit(1).toQuery();
                 query = dbQuery.text;
                 values = dbQuery.values;
-                return _context12.abrupt('return', this.db.query({ query: query, values: values }));
+                _context12.next = 5;
+                return this.db.query({ query: query, values: values });
 
-              case 4:
+              case 5:
+                dbResponse = _context12.sent;
+                return _context12.abrupt('return', new this(dbResponse[0]));
+
+              case 7:
               case 'end':
                 return _context12.stop();
             }
