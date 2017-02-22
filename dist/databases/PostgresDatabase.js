@@ -16,6 +16,10 @@ var PostgresDatabase = function () {
   function PostgresDatabase(userSettings) {
     _classCallCheck(this, PostgresDatabase);
 
+    userSettings = _extends({}, userSettings, {
+      user: userSettings.username
+    });
+
     // Load dependencies on demand only
     var pg = require('pg');
     var Pool = require('pg-pool');
