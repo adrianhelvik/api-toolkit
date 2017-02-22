@@ -238,7 +238,7 @@ var Controller = function () {
             switch (_context6.prev = _context6.next) {
               case 0:
                 console.log('Called error handler');
-                this.res.status(error.code || 500).json({
+                this.res.status(error.httpStatusCode || 500).json({
                   success: false,
                   reason: error.message
                 });

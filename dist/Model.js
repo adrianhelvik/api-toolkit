@@ -865,7 +865,7 @@ var Model = function () {
 
                 error = Error('[Model]: Updates are required');
 
-                error.code = 422;
+                error.httpStatusCode = 422;
                 throw error;
 
               case 4:

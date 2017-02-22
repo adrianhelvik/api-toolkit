@@ -131,6 +131,10 @@ class Model {
   }
 
   static async filterOnKey(key, val) {
+    if (! this.table[key]) {
+      throw Error(`The column ${key} was not found on the table: ${this.table._name}`)
+    }
+
     const query = this.table
       .select(this.table.star())
       .from(this.table)
