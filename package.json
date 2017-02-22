@@ -2,11 +2,13 @@
   "name": "@adrianhelvik/api-toolkit",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "test": "jest",
     "test:watch": "npm run test -- --watch",
-    "test:coverage": "npm run test -- --coverage"
+    "test:coverage": "npm run test -- --coverage",
+    "prepublish": "npm run build",
+    "build": "babel src -d dist"
   },
   "author": "",
   "license": "ISC",
