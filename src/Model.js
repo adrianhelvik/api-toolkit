@@ -312,7 +312,7 @@ class Model {
   static async update(id, updates = {}) {
     if (! Object.keys(updates).length) {
       const error = Error('[Model]: Updates are required')
-      error.code = 422
+      error.httpStatusCode = 422
       throw error
     }
 

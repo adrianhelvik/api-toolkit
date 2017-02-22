@@ -93,7 +93,7 @@ describe('Model', () => {
         try {
           await ConcreteModel.update('my-id')
         } catch (error) {
-          expect(error.code).toBe(422)
+          expect(error.httpStatusCode).toBe(422)
           expect(error.message).toBe('[Model]: Updates are required')
         }
       })

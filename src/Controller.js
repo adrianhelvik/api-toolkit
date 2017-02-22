@@ -86,7 +86,7 @@ class Controller {
    */
   async [handleError](error) {
     console.log('Called error handler')
-    this.res.status(error.code || 500)
+    this.res.status(error.httpStatusCode || 500)
       .json({
         success: false,
         reason: error.message

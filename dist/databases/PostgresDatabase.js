@@ -88,10 +88,14 @@ var PostgresDatabase = function () {
 
               case 2:
                 connection = _context2.sent;
-                dbResponse = connection.query(_query, values);
-                return _context2.abrupt('return', dbResponse.rows);
+                _context2.next = 5;
+                return connection.query(_query, values);
 
               case 5:
+                dbResponse = _context2.sent;
+                return _context2.abrupt('return', dbResponse.rows);
+
+              case 7:
               case 'end':
                 return _context2.stop();
             }
