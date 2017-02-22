@@ -234,7 +234,7 @@ class Model {
   }
 
   static async oneWhere(whereClauses = {}) {
-    const dbQuery = table
+    const dbQuery = this.table
       .select(this.table.star())
       .from(this.table)
       .where(whereClauses)
