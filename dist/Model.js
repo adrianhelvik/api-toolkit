@@ -681,10 +681,18 @@ var Model = function () {
           while (1) {
             switch (_context11.prev = _context11.next) {
               case 0:
+                if (this.table[key]) {
+                  _context11.next = 2;
+                  break;
+                }
+
+                throw Error('The column ' + key + ' was not found on the table: ' + this.table._name);
+
+              case 2:
                 query = this.table.select(this.table.star()).from(this.table).where(this.table[key].equals(val)).toQuery();
                 return _context11.abrupt('return', this.executeQueryAndCreateInstances(query));
 
-              case 2:
+              case 4:
               case 'end':
                 return _context11.stop();
             }
