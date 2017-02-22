@@ -171,6 +171,29 @@ describe('Model', () => {
         expect(actual).toEqual(expected)
       })
     })
+  })
+
+  describe('instance methods', () => {
+    describe('.save()', () => {
+      it('saves the instance to the database', async () => {
+        const instance = new ConcreteModel()
+        instance.role = 'some-role'
+
+        ConcreteModel.db.query
+          .mockReturnValueOnce([])
+
+        await instance.save()
+
+        expect(ConcreteModel.db.query).toBeCalledWith({
+          query: 'INSERT INTO "some-table" ("role") VALUES ($1) RETURNING *',
+          values: ['some-role']
+        })
+      })
+    })
+
+    describe('.destroy()', () => {
+    })
+
     describe('.loadHasManyRelations()', () => {
       describe('with parameters: { model: Model, foreignKey: String }', () => {
         class Book extends Model {
@@ -273,27 +296,41 @@ describe('Model', () => {
         })
       })
     })
-  })
 
-  describe('instance methods', () => {
-    describe('.save()', () => {
-      it('saves the instance to the database', async () => {
-        const instance = new ConcreteModel()
-        instance.role = 'some-role'
+    describe('.loadHasOneRelation()', () => {
+      class Bookshelf extends Model {
+        static table = 'bookshelf'
+        static columns = ['id']
+        static db = {
+          query: jest.fn()
+        }
+      }
 
-        ConcreteModel.db.query
-          .mockReturnValueOnce([])
+      class Book extends Model {
+        static table = 'book'
+        static columns = ['id', 'bookshelf']
 
-        await instance.save()
+        static hasOne = {
+          bookshelf: {
+            model: Bookshelf,
+            ownKey: 'bookshelf'
+          }
+        }
+      }
 
-        expect(ConcreteModel.db.query).toBeCalledWith({
-          query: 'INSERT INTO "some-table" ("role") VALUES ($1) RETURNING *',
-          values: ['some-role']
-        })
+      beforeAll(async () => {
       })
-    })
 
-    describe('.destroy()', () => {
+      it('loads the relation', async () => {
+        let book = new Book({ id: 'book', bookshelf: 'the-bookshelf' })
+        let bookshelf = new Bookshelf({ id: 'the-bookshelf' })
+
+        Bookshelf.db.query.mockReturnValueOnce([bookshelf])
+
+        await book.loadHasOneRelations()
+
+        expect(book.bookshelf).toEqual(bookshelf)
+      })
     })
   })
 })
