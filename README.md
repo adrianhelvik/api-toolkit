@@ -46,7 +46,7 @@ interface DatabaseInterface {
 # Caveats
 
 - Currently only supports Postgres
-- 
+- The database interface needs to be worked on
 
 # Test
 
