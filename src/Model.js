@@ -155,8 +155,19 @@ class Model {
 
     if (hasMany) {
       for (const relation of Object.keys(hasMany)) {
-        const foreignKey = table._name + '_id'
-        const relatedModel = hasMany[relation]
+        const options = hasMany[relation]
+
+        let foreignKey
+        let relatedModel
+
+        if (options instanceof Model) {
+          foreignKey = table._name + '_id'
+          relatedModel = options
+        } else {
+          foreignKey = options.foreignKey
+          relatedModel = options.model
+        }
+
         const related = await relatedModel.filterOnKey(foreignKey, id)
 
         this[relation] = related
