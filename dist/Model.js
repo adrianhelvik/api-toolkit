@@ -146,7 +146,7 @@ var Model = (_temp = _class = function () {
                 _constructor = this.constructor, hasMany = _constructor.hasMany, table = _constructor.table;
 
                 if (!hasMany) {
-                  _context2.next = 28;
+                  _context2.next = 36;
                   break;
                 }
 
@@ -158,59 +158,78 @@ var Model = (_temp = _class = function () {
 
               case 7:
                 if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                  _context2.next = 14;
+                  _context2.next = 22;
                   break;
                 }
 
                 relation = _step.value;
-                _context2.next = 11;
+                _context2.prev = 9;
+                _context2.next = 12;
                 return this.loadHasManyRelation(relation, hasMany[relation]);
 
-              case 11:
+              case 12:
+                _context2.next = 19;
+                break;
+
+              case 14:
+                _context2.prev = 14;
+                _context2.t0 = _context2['catch'](9);
+
+                if (!(hasMany[relation].model && hasMany[relation].foreignKey)) {
+                  _context2.next = 18;
+                  break;
+                }
+
+                throw Error('[loadHasManyRelation]: You forget to create a mapping from a key to { model, options }');
+
+              case 18:
+                throw _context2.t0;
+
+              case 19:
                 _iteratorNormalCompletion = true;
                 _context2.next = 7;
                 break;
 
-              case 14:
-                _context2.next = 20;
+              case 22:
+                _context2.next = 28;
                 break;
 
-              case 16:
-                _context2.prev = 16;
-                _context2.t0 = _context2['catch'](5);
+              case 24:
+                _context2.prev = 24;
+                _context2.t1 = _context2['catch'](5);
                 _didIteratorError = true;
-                _iteratorError = _context2.t0;
+                _iteratorError = _context2.t1;
 
-              case 20:
-                _context2.prev = 20;
-                _context2.prev = 21;
+              case 28:
+                _context2.prev = 28;
+                _context2.prev = 29;
 
                 if (!_iteratorNormalCompletion && _iterator.return) {
                   _iterator.return();
                 }
 
-              case 23:
-                _context2.prev = 23;
+              case 31:
+                _context2.prev = 31;
 
                 if (!_didIteratorError) {
-                  _context2.next = 26;
+                  _context2.next = 34;
                   break;
                 }
 
                 throw _iteratorError;
 
-              case 26:
-                return _context2.finish(23);
+              case 34:
+                return _context2.finish(31);
 
-              case 27:
-                return _context2.finish(20);
+              case 35:
+                return _context2.finish(28);
 
-              case 28:
+              case 36:
               case 'end':
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[5, 16, 20, 28], [21,, 23, 27]]);
+        }, _callee2, this, [[5, 24, 28, 36], [9, 14], [29,, 31, 35]]);
       }));
 
       function loadHasManyRelations() {
@@ -232,31 +251,22 @@ var Model = (_temp = _class = function () {
                 _constructor$parseHas = this.constructor.parseHasManyOptions(options), foreignKey = _constructor$parseHas.foreignKey, relatedModel = _constructor$parseHas.relatedModel;
 
                 if (relatedModel) {
-                  _context3.next = 5;
+                  _context3.next = 3;
                   break;
                 }
 
-                if (!(options.model && options.foreignKey)) {
-                  _context3.next = 4;
-                  break;
-                }
-
-                throw Error('[loadHasManyRelation]: You forget to create a mapping from a key to { model, options }');
-
-              case 4:
                 throw Error('Cannot load hasMany relations for non-model!');
 
-              case 5:
-                _context3.next = 7;
+              case 3:
+                _context3.next = 5;
                 return relatedModel.filterOnKey(foreignKey, this.id);
 
-              case 7:
+              case 5:
                 related = _context3.sent;
-
 
                 this[name] = related;
 
-              case 9:
+              case 7:
               case 'end':
                 return _context3.stop();
             }
