@@ -159,7 +159,14 @@ class Model {
     if (hasMany) {
       for (const relation of Object.keys(hasMany)) {
         // TODO: Use Promise.all instead. But bear race conditions in mind
-        await this.loadHasManyRelation(relation, hasMany[relation])
+        try {
+          await this.loadHasManyRelation(relation, hasMany[relation])
+        } catch (err) {
+          if (hasMany[relation].model && hasMany[relation].foreignKey) {
+            throw Error('[loadHasManyRelation]: You forget to create a mapping from a key to { model, options }')
+          }
+          throw err
+        }
       }
     }
   }
@@ -168,14 +175,10 @@ class Model {
     const { foreignKey, relatedModel } = this.constructor.parseHasManyOptions(options)
 
     if (! relatedModel) {
-      if (options.model && options.foreignKey) {
-        throw Error('[loadHasManyRelation]: You forget to create a mapping from a key to { model, options }')
-      }
       throw Error('Cannot load hasMany relations for non-model!')
     }
 
     const related = await relatedModel.filterOnKey(foreignKey, this.id)
-
     this[name] = related
   }
 
